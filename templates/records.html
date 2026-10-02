@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ExecSafe | Interview Records</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="shell records-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">ES</span><span>ExecSafe</span><span class="brand-tag">FIELD DECISION LAB</span></div>
+      <a class="text-button" href="{{ url_for('index') }}"><span aria-hidden="true">&#8592;</span> Back to interview</a>
+    </header>
+
+    <section class="records-intro">
+      <p class="eyebrow">EXECUTIVE SAFETY SIGNAL</p>
+      <h1>Interview records</h1>
+      <p class="lede">Select a completed interview to review its analysis and saved conversation.</p>
+    </section>
+
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <section class="record-list" aria-label="Completed interview records">
+      {% if records %}
+        {% for record in records %}
+          <a class="record-row" href="{{ url_for('record_detail', record_id=record.id) }}">
+            <span class="record-row-id">{{ loop.index }}</span>
+            <span class="record-row-main"><strong>{{ record.username }}</strong></span>
+            <time datetime="{{ record.completed_at }}">{{ record.completed_at }}</time>
+            <span class="record-arrow" aria-hidden="true">&#8594;</span>
+          </a>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state"><p class="eyebrow">NO COMPLETED INTERVIEWS</p><p>Completed interviews will appear here after the first session.</p></div>
+      {% endif %}
+    </section>
+
+    <footer class="privacy-note"><span>EXECSAFE / INTERNAL DECISION TOOL</span><span>Completed interviews are retained for audit review.</span></footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ExecSafe | Decision Readout</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">ES</span><span>ExecSafe</span><span class="brand-tag">FIELD DECISION LAB</span></div>
+      <div class="topbar-actions"><a class="text-button" href="{{ url_for('records') }}"><span aria-hidden="true">&#9638;</span> Interview Records</a><button id="reset" class="text-button" type="button"><span aria-hidden="true">&#8635;</span> Start over</button></div>
+    </header>
+
+    <section id="welcome-screen" class="intro">
+      <div class="intro-meta"><p class="eyebrow">EXECUTIVE SAFETY SIGNAL</p><span class="live-dot">LIVE SESSION</span></div>
+      <h1>Make the call.<br><em>See what drives it.</em></h1>
+      <p class="lede">You are the Managing Director of a construction company in Singapore. ExecSafe reveals how your reasoning changes as Project Alpha develops under pressure. There is no predetermined correct response.</p>
+      <form id="name-form" class="name-form">
+        <label for="username">Your Name</label>
+        <input id="username" name="username" class="name-input" maxlength="120" placeholder="Enter your name" autocomplete="name" required>
+        <button type="submit" class="send-button">Continue <span aria-hidden="true">↗</span></button>
+      </form>
+    </section>
+
+    <section id="interview-panel" class="interview-panel" aria-label="Interview" hidden>
+      <div class="panel-heading"><div><p class="panel-kicker">PRIORITY INTERVIEW / {{ stage_title }}</p><span id="stage">Stage {{ stage }} of 3</span></div><div class="panel-status"><span id="respondent-identity" class="respondent-identity" hidden></span><span id="status" class="status-pill"><i></i> IN PROGRESS</span></div></div>
+      <div class="progress-track"><div id="progress" style="width: 10%"></div></div>
+      <div id="conversation" class="conversation">
+        <article class="message agent-message"><div class="avatar">ES</div><div class="message-bubble"><span class="speaker">EXECSAFE / FIXED SCENARIO</span><p id="context" class="context">{{ initial_context }}</p><p id="question">{{ initial_question }}</p></div></article>
+      </div>
+      <form id="answer-form" class="answer-form">
+        <div id="choice-step" class="choice-step"><label>SELECT YOUR DECISION</label><div id="choices" class="choices">{% for choice in choices %}<button type="button" class="choice-button" data-choice="{{ choice }}">{{ choice }}</button>{% endfor %}</div></div>
+        <div id="answer-step" class="answer-step" hidden><label id="answer-label" for="answer">EXPLAIN YOUR DECISION</label><textarea id="answer" rows="5" maxlength="2000" placeholder="What led you to that choice, and what trade-off are you accepting?"></textarea></div>
+        <div class="form-footer"><span id="count">0 / 2000</span><button type="submit" class="send-button">Submit <span aria-hidden="true">↗</span></button></div>
+      </form>
+      <div id="error" class="error" role="alert" hidden></div>
+      <section id="result" class="result" hidden></section>
+    </section>
+    <footer class="privacy-note"><span>EXECSAFE / INTERNAL DECISION TOOL</span><span>Your name and answers are saved for interview audit purposes when complete.</span></footer>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

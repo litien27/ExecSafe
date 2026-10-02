@@ -1,0 +1,243 @@
+[
+  {
+    "username": "ali",
+    "stages": [
+      {
+        "stage": 1,
+        "title": "Initial Safety Concern",
+        "context": "During the monthly management review, the Head of Workplace Safety and Health reports that Project Alpha recorded three high-potential near misses during the past month during lifting and work-at-height activities. No worker was injured. The Head of WSH recommends an immediate focused safety review, which may require additional supervision and temporary changes to ongoing work arrangements.",
+        "fixed_question": "What would you do at this point?",
+        "choice": "A. Initiate the proposed safety review immediately.",
+        "ai_question": "What concerns you most about the current situation?",
+        "answer": "sdfsdasd",
+        "reasoning_extraction": {
+          "safety_consideration": 0,
+          "production_consideration": 0,
+          "evidence_seeking": 0,
+          "uncertainty_acknowledgement": 0,
+          "information_source": null,
+          "action_scope": null,
+          "emergent_consideration": null
+        }
+      },
+      {
+        "stage": 2,
+        "title": "Production Pressure",
+        "context": "Project Alpha is currently six weeks behind schedule. To recover the delay, the project has introduced an accelerated recovery programme involving extended working hours and increased concurrent work activities. The Project Director informs you that implementing the proposed safety review immediately may disrupt the recovery programme and make it more difficult to achieve an upcoming critical milestone.",
+        "fixed_question": "Given this additional information, does your initial decision change?",
+        "choice": "C. I need additional information before deciding.",
+        "elaboration": "I would like to talk with the site personnel",
+        "ai_question": "What consequence of your proposed approach would you monitor most closely?",
+        "answer": "Whether site personnel is confident with current work arrangement",
+        "reasoning_extraction": {
+          "safety_consideration": 0,
+          "production_consideration": 0,
+          "evidence_seeking": 0,
+          "uncertainty_acknowledgement": 0,
+          "information_source": null,
+          "action_scope": null,
+          "emergent_consideration": null
+        }
+      },
+      {
+        "stage": 3,
+        "title": "Conflicting Safety Information",
+        "context": "Further information is now available. The Project Director reports that Project Alpha remains compliant with existing WSH requirements and suggests that the increase in near-miss reports may reflect improved reporting rather than deteriorating safety performance. However, the Head of WSH reports that some project supervisors have raised concerns that work teams are changing normal work sequences and working extended hours to recover the schedule. There is insufficient evidence to establish whether the recovery programme is contributing directly to the increase in near misses.",
+        "fixed_question": "What would you do now?",
+        "choice": "E. Take another action.",
+        "elaboration": "Lim teh with BCA officer",
+        "ai_question": "What consequence of your proposed approach would you monitor most closely?",
+        "answer": "whether the officer is happy",
+        "reasoning_extraction": {
+          "safety_consideration": 0,
+          "production_consideration": 0,
+          "evidence_seeking": 0,
+          "uncertainty_acknowledgement": 0,
+          "information_source": null,
+          "action_scope": null,
+          "emergent_consideration": null
+        }
+      }
+    ],
+    "reasoning_extraction": "Test-mode reasoning summary generated without an LLM.",
+    "analysis": {
+      "analysis": "Test-mode analysis generated without an LLM.",
+      "reasoning_extraction": "Test-mode reasoning summary generated without an LLM.",
+      "category": "Company Safety Merit",
+      "confidence": "low",
+      "scores": {
+        "Cost": 0.0,
+        "Company Reputation": 0.0,
+        "Legal Consequencies": 0.0,
+        "Empthy to Worker/Victime": 0.0,
+        "Meeting Project Schedule": 0.0,
+        "Company Safety Merit": 1.0,
+        "Personal KPI": 0.0
+      },
+      "evidence": [
+        "The interview completed in offline test mode."
+      ]
+    },
+    "completed_at": "2026-10-01T13:47:31.202267+00:00"
+  },
+  {
+    "username": "ah kao",
+    "stages": [
+      {
+        "stage": 1,
+        "title": "Initial Safety Concern",
+        "context": "During the monthly management review, the Head of Workplace Safety and Health reports that Project Alpha recorded three high-potential near misses during the past month during lifting and work-at-height activities. No worker was injured. The Head of WSH recommends an immediate focused safety review, which may require additional supervision and temporary changes to ongoing work arrangements.",
+        "fixed_question": "What would you do at this point?",
+        "choice": "D. Take another action.",
+        "elaboration": "abc",
+        "ai_question": "What consequence of your proposed approach would you monitor most closely?",
+        "answer": "abc",
+        "reasoning_extraction": {
+          "safety_consideration": 0,
+          "production_consideration": 0,
+          "evidence_seeking": 0,
+          "uncertainty_acknowledgement": 0,
+          "information_source": null,
+          "action_scope": null,
+          "emergent_consideration": null
+        }
+      },
+      {
+        "stage": 2,
+        "title": "Production Pressure",
+        "context": "Project Alpha is currently six weeks behind schedule. To recover the delay, the project has introduced an accelerated recovery programme involving extended working hours and increased concurrent work activities. The Project Director informs you that implementing the proposed safety review immediately may disrupt the recovery programme and make it more difficult to achieve an upcoming critical milestone.",
+        "fixed_question": "Given this additional information, does your initial decision change?",
+        "choice": "C. I need additional information before deciding.",
+        "elaboration": "abc",
+        "ai_question": "What consequence of your proposed approach would you monitor most closely?",
+        "answer": "abc",
+        "reasoning_extraction": {
+          "safety_consideration": 0,
+          "production_consideration": 0,
+          "evidence_seeking": 0,
+          "uncertainty_acknowledgement": 0,
+          "information_source": null,
+          "action_scope": null,
+          "emergent_consideration": null
+        }
+      },
+      {
+        "stage": 3,
+        "title": "Conflicting Safety Information",
+        "context": "Further information is now available. The Project Director reports that Project Alpha remains compliant with existing WSH requirements and suggests that the increase in near-miss reports may reflect improved reporting rather than deteriorating safety performance. However, the Head of WSH reports that some project supervisors have raised concerns that work teams are changing normal work sequences and working extended hours to recover the schedule. There is insufficient evidence to establish whether the recovery programme is contributing directly to the increase in near misses.",
+        "fixed_question": "What would you do now?",
+        "choice": "B. Modify the recovery programme and conduct a focused review of affected activities.",
+        "ai_question": "What information influenced your decision to modify the recovery programme?",
+        "answer": "abc",
+        "reasoning_extraction": {
+          "safety_consideration": 0,
+          "production_consideration": 0,
+          "evidence_seeking": 0,
+          "uncertainty_acknowledgement": 0,
+          "information_source": null,
+          "action_scope": null,
+          "emergent_consideration": null
+        }
+      }
+    ],
+    "reasoning_extraction": "Test-mode reasoning summary generated without an LLM.",
+    "analysis": {
+      "analysis": "Test-mode analysis generated without an LLM.",
+      "reasoning_extraction": "Test-mode reasoning summary generated without an LLM.",
+      "category": "Company Safety Merit",
+      "confidence": "low",
+      "scores": {
+        "Cost": 0.0,
+        "Company Reputation": 0.0,
+        "Legal Consequencies": 0.0,
+        "Empthy to Worker/Victime": 0.0,
+        "Meeting Project Schedule": 0.0,
+        "Company Safety Merit": 1.0,
+        "Personal KPI": 0.0
+      },
+      "evidence": [
+        "The interview completed in offline test mode."
+      ]
+    },
+    "completed_at": "2026-10-01T14:02:52.540195+00:00"
+  },
+  {
+    "username": "as",
+    "stages": [
+      {
+        "stage": 1,
+        "title": "Initial Safety Concern",
+        "context": "During the monthly management review, the Head of Workplace Safety and Health reports that Project Alpha recorded three high-potential near misses during the past month during lifting and work-at-height activities. No worker was injured. The Head of WSH recommends an immediate focused safety review, which may require additional supervision and temporary changes to ongoing work arrangements.",
+        "fixed_question": "What would you do at this point?",
+        "choice": "B. Allow current activities to continue with additional safety monitoring.",
+        "ai_question": "What gives you confidence that the activities can continue?",
+        "answer": "asdasd",
+        "reasoning_extraction": {
+          "safety_consideration": 0,
+          "production_consideration": 0,
+          "evidence_seeking": 0,
+          "uncertainty_acknowledgement": 0,
+          "information_source": null,
+          "action_scope": null,
+          "emergent_consideration": null
+        }
+      },
+      {
+        "stage": 2,
+        "title": "Production Pressure",
+        "context": "Project Alpha is currently six weeks behind schedule. To recover the delay, the project has introduced an accelerated recovery programme involving extended working hours and increased concurrent work activities. The Project Director informs you that implementing the proposed safety review immediately may disrupt the recovery programme and make it more difficult to achieve an upcoming critical milestone.",
+        "fixed_question": "Given this additional information, does your initial decision change?",
+        "choice": "B. Modify my previous decision.",
+        "ai_question": "What about the new information caused you to change your decision?",
+        "answer": "asdasd",
+        "reasoning_extraction": {
+          "safety_consideration": 0,
+          "production_consideration": 0,
+          "evidence_seeking": 0,
+          "uncertainty_acknowledgement": 0,
+          "information_source": null,
+          "action_scope": null,
+          "emergent_consideration": null
+        }
+      },
+      {
+        "stage": 3,
+        "title": "Conflicting Safety Information",
+        "context": "Further information is now available. The Project Director reports that Project Alpha remains compliant with existing WSH requirements and suggests that the increase in near-miss reports may reflect improved reporting rather than deteriorating safety performance. However, the Head of WSH reports that some project supervisors have raised concerns that work teams are changing normal work sequences and working extended hours to recover the schedule. There is insufficient evidence to establish whether the recovery programme is contributing directly to the increase in near misses.",
+        "fixed_question": "What would you do now?",
+        "choice": "A. Continue the recovery programme with additional safety monitoring.",
+        "ai_question": "What gives you confidence that continuing the recovery programme is appropriate?",
+        "answer": "sdfsdvs",
+        "reasoning_extraction": {
+          "safety_consideration": 0,
+          "production_consideration": 0,
+          "evidence_seeking": 0,
+          "uncertainty_acknowledgement": 0,
+          "information_source": null,
+          "action_scope": null,
+          "emergent_consideration": null
+        }
+      }
+    ],
+    "reasoning_extraction": "Test-mode reasoning summary generated without an LLM.",
+    "analysis": {
+      "analysis": "Test-mode analysis generated without an LLM.",
+      "reasoning_extraction": "Test-mode reasoning summary generated without an LLM.",
+      "category": "Company Safety Merit",
+      "confidence": "low",
+      "scores": {
+        "Cost": 0.0,
+        "Company Reputation": 0.0,
+        "Legal Consequencies": 0.0,
+        "Empthy to Worker/Victime": 0.0,
+        "Meeting Project Schedule": 0.0,
+        "Company Safety Merit": 1.0,
+        "Personal KPI": 0.0
+      },
+      "evidence": [
+        "The interview completed in offline test mode."
+      ]
+    },
+    "completed_at": "2026-10-01T14:14:32.747862+00:00"
+  }
+]

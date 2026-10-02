@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ExecSafe | Interview {{ record.id }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="shell records-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">ES</span><span>ExecSafe</span><span class="brand-tag">FIELD DECISION LAB</span></div>
+      <a class="text-button" href="{{ url_for('records') }}"><span aria-hidden="true">&#8592;</span> Interview Records</a>
+    </header>
+
+    <section class="record-detail-heading">
+      <p class="eyebrow">COMPLETED INTERVIEW</p>
+      <h1>{{ record.username }}</h1>
+      <p class="record-meta">Completed {{ record.completed_at }} / Record {{ record.id }}</p>
+    </section>
+
+    <section class="analysis-report" aria-label="Interview analysis">
+      <p class="eyebrow">EXECSAFE READOUT</p>
+      <h2>{{ record.category }}</h2>
+      <p>{{ record.analysis }}</p>
+      <div class="score-list">
+        {% for label, score in record.scores.items()|sort(attribute='1', reverse=true) %}
+          <span>{{ label }} <strong>{{ (score * 100)|round|int }}%</strong></span>
+        {% endfor %}
+      </div>
+      <p class="confidence">Confidence: {{ record.confidence }}</p>
+    </section>
+
+    <section class="history-section" aria-label="Saved chat history">
+      <div class="section-heading"><p class="eyebrow">SAVED CHAT HISTORY</p><span>{{ record.transcript|length }} stages</span></div>
+      <div class="history-list">
+        {% for item in record.transcript %}
+          <article class="history-stage">
+            <div class="history-stage-heading"><strong>Stage {{ item.stage }} / {{ item.title }}</strong></div>
+            <div class="history-message agent-history"><span class="history-speaker">EXECSAFE</span><p>{{ item.context }}</p><p>{{ item.fixed_question }}</p></div>
+            <div class="history-message user-history"><span class="history-speaker">YOU</span><p>{{ item.choice }}</p></div>
+            {% if item.elaboration %}<div class="history-message user-history"><span class="history-speaker">YOU / ELABORATION</span><p>{{ item.elaboration }}</p></div>{% endif %}
+            {% if item.ai_question %}<div class="history-message agent-history"><span class="history-speaker">EXECSAFE / FOLLOW-UP</span><p>{{ item.ai_question }}</p></div>{% endif %}
+            {% if item.answer %}<div class="history-message user-history"><span class="history-speaker">YOU / RESPONSE</span><p>{{ item.answer }}</p></div>{% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <footer class="privacy-note"><span>EXECSAFE / INTERNAL DECISION TOOL</span><a class="text-button" href="{{ url_for('index') }}">Start a new interview</a></footer>
+  </main>
+</body>
+</html>
