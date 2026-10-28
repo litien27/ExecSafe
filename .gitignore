@@ -1,6 +1,29 @@
+
+# Environment variables and API secrets
 .env
-__pycache__/
-*.py[cod]
-*.db
+.env.*
+!.env.example
+
+# Python virtual environments
 .venv/
 venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local databases
+*.db
+*.sqlite3
+
+# Participant and interview data
+interviews.json
+
+# Private research datasets
+evaluation/data/
+
+# Generated evaluation results
+evaluation/results/
+
+# macOS files
+.DS_Store
