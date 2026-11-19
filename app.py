@@ -12,7 +12,13 @@ from typing import Any
 from flask import Flask, jsonify, render_template, request, session
 from dotenv import load_dotenv
 
-from agent import CATEGORIES, OPEN_ANSWER_CHOICES, REASONING_FEATURES, STAGE_QUESTIONS, extract_reasoning, final_analysis, generated_follow_up, next_question
+from agent import (
+    OPEN_ANSWER_CHOICES,
+    STAGE_QUESTIONS,
+    extract_reasoning,
+    generated_follow_up,
+    next_question,
+)
 
 load_dotenv()
 app = Flask(__name__)
@@ -30,29 +36,64 @@ def _follow_up(stage_record: dict[str, Any]) -> dict[str, str]:
     return generated_follow_up(stage_record)
 
 
+
 def _reasoning_extraction(stage_record: dict[str, Any]) -> dict[str, Any]:
+    """Extract four observable features from the participant's response."""
+
     if TEST_WITHOUT_LLM:
         return {
-            feature: (0 if feature in REASONING_FEATURES[:4] else None)
-            for feature in REASONING_FEATURES
+            "SC": 0,
+            "PC": 0,
+            "ES": 0,
+            "UA": 0,
+            "evidence": {
+                "SC": None,
+                "PC": None,
+                "ES": None,
+                "UA": None,
+            },
+            "evidence_status": "test_mode",
+            "evidence_errors": [],
         }
+
     return extract_reasoning(stage_record)
 
 
 def _analysis(transcript: list[dict[str, Any]]) -> dict[str, Any]:
-    if TEST_WITHOUT_LLM:
-        scores = {category: 0.0 for category in CATEGORIES}
-        scores["Company Safety Merit"] = 1.0
-        return {
-            "analysis": "Test-mode analysis generated without an LLM.",
-            "reasoning_extraction": "Test-mode reasoning summary generated without an LLM.",
-            "category": "Company Safety Merit",
-            "confidence": "low",
-            "scores": scores,
-            "evidence": ["The interview completed in offline test mode."],
-        }
-    return final_analysis(transcript)
+    """Prepare a descriptive three-stage reasoning readout."""
 
+    features = ["SC", "PC", "ES", "UA"]
+
+    stages = []
+
+    for item in transcript:
+        extraction = item.get("reasoning_extraction", {})
+
+        stages.append({
+            "stage": item["stage"],
+            "title": item["title"],
+            "choice": item["choice"],
+            "response": item.get("answer", ""),
+            "features": {
+                feature: extraction.get(feature, 0)
+                for feature in features
+            },
+            "evidence": extraction.get("evidence", {}),
+            "evidence_status": extraction.get(
+                "evidence_status", "unknown"
+            ),
+        })
+
+    return {
+        "analysis_type": "observable_reasoning",
+        "stages": stages,
+        "feature_names": features,
+        "disclaimer": (
+            "These labels describe expressed reasoning in the "
+            "participant's responses. They do not measure "
+            "leadership quality or actual safety behaviour."
+        ),
+    }
 
 def _init_database() -> None:
     with sqlite3.connect(DATABASE_PATH) as connection:
@@ -70,30 +111,37 @@ def _init_database() -> None:
         )
 
 
-def _save_audit(username: str, transcript: list[dict[str, Any]], result: dict[str, Any]) -> None:
+
+def _save_audit(
+    username: str,
+    transcript: list[dict[str, Any]],
+    result: dict[str, Any]
+) -> None:
+    """Save four-feature results using the existing database schema."""
+
     with sqlite3.connect(DATABASE_PATH) as connection:
         connection.execute(
             """INSERT INTO interview_audits (
-                username, transcript_json, scores_json, analysis,
-                final_category, confidence, completed_at
+                username, transcript_json, scores_json,
+                analysis, final_category, confidence,
+                completed_at
             ) VALUES (?, ?, ?, ?, ?, ?, ?)""",
             (
                 username,
-                json.dumps(transcript, ensure_ascii=True),
-                json.dumps(result["scores"], ensure_ascii=True),
-                result["analysis"],
-                result["category"],
-                result["confidence"],
+                json.dumps(transcript, ensure_ascii=False),
+                json.dumps(result, ensure_ascii=False),
+                json.dumps(result, ensure_ascii=False),
+                "Observable Reasoning",
+                "not_applicable",
                 datetime.now(timezone.utc).isoformat(),
             ),
         )
-
 
 def _save_json(username: str, transcript: list[dict[str, Any]], result: dict[str, Any]) -> None:
     record = {
         "username": username,
         "stages": transcript,
-        "reasoning_extraction": result.get("reasoning_extraction", ""),
+        "reasoning_readout": result,
         "analysis": result,
         "completed_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -111,18 +159,41 @@ def _save_json(username: str, transcript: list[dict[str, Any]], result: dict[str
         json.dump(records, json_file, ensure_ascii=True, indent=2)
 
 
+
 def _record_from_row(row: sqlite3.Row) -> dict[str, Any]:
+    """Read both old and new ExecSafe interview records."""
+
+    stored = json.loads(row["scores_json"])
+
+    if (
+        isinstance(stored, dict)
+        and stored.get("analysis_type") == "observable_reasoning"
+    ):
+        return {
+            "id": row["id"],
+            "username": row["username"],
+            "completed_at": row["completed_at"],
+            "analysis_type": "observable_reasoning",
+            "reasoning_readout": stored,
+            "transcript": json.loads(row["transcript_json"]),
+            "category": "Observable Reasoning",
+            "analysis": "Four-feature reasoning readout",
+            "confidence": "not_applicable",
+            "scores": {},
+        }
+
+    # Preserve older seven-category interview records
     return {
         "id": row["id"],
         "username": row["username"],
         "completed_at": row["completed_at"],
+        "analysis_type": "legacy",
         "analysis": row["analysis"],
         "category": row["final_category"],
         "confidence": row["confidence"],
-        "scores": json.loads(row["scores_json"]),
+        "scores": stored,
         "transcript": json.loads(row["transcript_json"]),
     }
-
 
 def _load_records() -> list[dict[str, Any]]:
     with sqlite3.connect(DATABASE_PATH) as connection:

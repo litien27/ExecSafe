@@ -79,7 +79,7 @@ function showChoiceStep(data) {
   submitButton.hidden = true;
   setChoices(data.choices);
   addQuestion(data.fixed_question, data.context);
-  document.querySelector('.panel-kicker').textContent = `PRIORITY INTERVIEW / ${data.title}`;
+  document.querySelector('.panel-kicker').textContent = `EXECUTIVE REASONING INTERVIEW / ${data.title}`;
 }
 
 function showAnswerStep(data) {

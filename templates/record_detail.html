@@ -19,17 +19,84 @@
       <p class="record-meta">Completed {{ record.completed_at }} / Record {{ record.id }}</p>
     </section>
 
-    <section class="analysis-report" aria-label="Interview analysis">
-      <p class="eyebrow">EXECSAFE READOUT</p>
-      <h2>{{ record.category }}</h2>
-      <p>{{ record.analysis }}</p>
-      <div class="score-list">
-        {% for label, score in record.scores.items()|sort(attribute='1', reverse=true) %}
-          <span>{{ label }} <strong>{{ (score * 100)|round|int }}%</strong></span>
-        {% endfor %}
+<section class="analysis-report" aria-label="Interview analysis">
+  <p class="eyebrow">EXECSAFE / REASONING READOUT</p>
+
+  {% if record.analysis_type == "observable_reasoning" %}
+
+    <h2>Observable Reasoning Across Three Stages</h2>
+
+    <p>
+      This readout identifies reasoning features expressed
+      in the participant's responses. It does not assess
+      leadership quality or actual safety behaviour.
+    </p>
+
+    {% set feature_names = {
+      "SC": "Safety consideration",
+      "PC": "Production consideration",
+      "ES": "Evidence seeking",
+      "UA": "Uncertainty acknowledgement"
+    } %}
+
+    {% for item in record.reasoning_readout.stages %}
+      <div class="history-stage">
+        <h3>Stage {{ item.stage }} — {{ item.title }}</h3>
+
+        <p><strong>Decision:</strong> {{ item.choice }}</p>
+        <p><strong>Explanation:</strong> {{ item.response }}</p>
+
+        <div class="score-list">
+          {% for code, label in feature_names.items() %}
+            <div class="reasoning-feature">
+              <strong>{{ code }} — {{ label }}</strong>
+
+              {% if item.features[code] == 1 %}
+                <span>Present (1)</span>
+
+                {% if item.evidence.get(code) %}
+                  <p>
+                    <em>Evidence:</em>
+                    "{{ item.evidence[code] }}"
+                  </p>
+                {% endif %}
+
+              {% else %}
+                <span>Not identified (0)</span>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+
+        {% if item.evidence_status == "invalid" %}
+          <p class="confidence">
+            Some supporting excerpts require researcher review.
+          </p>
+        {% endif %}
       </div>
-      <p class="confidence">Confidence: {{ record.confidence }}</p>
-    </section>
+    {% endfor %}
+
+  {% else %}
+
+    <h2>{{ record.category }}</h2>
+    <p>{{ record.analysis }}</p>
+
+    <div class="score-list">
+      {% for label, score in
+          record.scores.items()|sort(attribute='1', reverse=true) %}
+        <span>
+          {{ label }}
+          <strong>{{ (score * 100)|round|int }}%</strong>
+        </span>
+      {% endfor %}
+    </div>
+
+    <p class="confidence">
+      Confidence: {{ record.confidence }}
+    </p>
+
+  {% endif %}
+</section>
 
     <section class="history-section" aria-label="Saved chat history">
       <div class="section-heading"><p class="eyebrow">SAVED CHAT HISTORY</p><span>{{ record.transcript|length }} stages</span></div>

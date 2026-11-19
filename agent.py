@@ -234,21 +234,90 @@ def final_analysis(transcript: list[dict[str, Any]]) -> dict[str, Any]:
     return result
 
 
-def extract_reasoning(stage_record: dict[str, Any]) -> dict[str, Any]:
-    """Code only observable reasoning features expressed in one stage response."""
-    prompt = f"""You are coding one participant response from the ExecSafe proof of concept.
-Return JSON only with exactly these keys: {json.dumps(REASONING_FEATURES)}.
-For the first four keys, return 0 or 1. For information_source and action_scope, return a short
-string or null. For emergent_consideration, return a short string or null. Use only explicit
-evidence in the record. These are observable response features, not validated scores or a
-judgement of leadership.
 
-Stage record:
-{json.dumps(stage_record, ensure_ascii=True)}"""
-    result = _request_json(prompt, [{"role": "user", "content": "Code the observable reasoning now."}])
-    if set(result) != set(REASONING_FEATURES):
-        raise ValueError("The model returned invalid reasoning features.")
-    binary_features = REASONING_FEATURES[:4]
-    if any(result[feature] not in (0, 1) for feature in binary_features):
-        raise ValueError("The model returned invalid binary reasoning features.")
-    return result
+def extract_reasoning(stage_record: dict[str, Any]) -> dict[str, Any]:
+    """Extract four observable reasoning features using frozen Prompt V4."""
+
+    from pathlib import Path
+
+    # Load the evaluated extraction prompt
+    prompt_path = (
+        Path(__file__).resolve().parent
+        / "evaluation/prompts/extraction_v4.txt"
+    )
+
+    prompt = prompt_path.read_text(encoding="utf-8")
+
+    # Use only the participant's follow-up response
+    response_text = str(stage_record.get("answer", "")).strip()
+
+    if not response_text:
+        raise ValueError("Participant response is empty.")
+
+    # Use the same model as the held-out evaluation
+    client = _client()
+
+    if client is None:
+        raise RuntimeError("OPENAI_API_KEY is not configured.")
+
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        instructions=prompt,
+        input=(
+            "Classify this participant response:\n\n"
+            + response_text
+        )
+    )
+
+    # Parse JSON, allowing optional Markdown fences
+    raw = response.output_text.strip()
+
+    if raw.startswith("```"):
+        lines = raw.splitlines()
+        if lines[-1].strip() == "```":
+            raw = "\n".join(lines[1:-1]).strip()
+
+    result = json.loads(raw)
+
+    # Validate the four binary classifications
+    features = ["SC", "PC", "ES", "UA"]
+
+    for feature in features:
+        if type(result.get(feature)) is not int:
+            raise ValueError(f"Invalid {feature} label.")
+
+        if result[feature] not in (0, 1):
+            raise ValueError(f"{feature} must be 0 or 1.")
+
+    # Check supporting evidence separately
+    evidence = result.get("evidence")
+
+    if not isinstance(evidence, dict):
+        raise ValueError("Missing evidence dictionary.")
+
+    evidence_errors = []
+
+    for feature in features:
+        excerpt = evidence.get(feature)
+
+        if result[feature] == 1:
+            if not isinstance(excerpt, str) or not excerpt.strip():
+                evidence_errors.append(f"{feature}: missing evidence")
+
+            elif excerpt not in response_text:
+                evidence_errors.append(f"{feature}: non-exact evidence")
+
+        elif excerpt is not None:
+            evidence_errors.append(f"{feature}: unexpected evidence")
+
+    return {
+        "SC": result["SC"],
+        "PC": result["PC"],
+        "ES": result["ES"],
+        "UA": result["UA"],
+        "evidence": evidence,
+        "evidence_status": (
+            "valid" if not evidence_errors else "invalid"
+        ),
+        "evidence_errors": evidence_errors
+    }
